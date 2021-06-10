@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <!-- Time Select -->
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner"
+        android:padding="10dp" />
+
+    <!-- Weekday Select -->
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btnSunday"
+            android:text="@string/sunday"
+            android:tag="@string/sundayTag"
+            style="@style/WeekdayStyle" />
+        <Button
+            android:id="@+id/btnMonday"
+            android:text="@string/monday"
+            android:tag="@string/mondayTag"
+            style="@style/WeekdayStyle" />
+        <Button
+            android:id="@+id/btnTuesday"
+            android:text="@string/tuesday"
+            android:tag="@string/tuesdayTag"
+            style="@style/WeekdayStyle" />
+        <Button
+            android:id="@+id/btnWednesday"
+            android:text="@string/wednesday"
+            android:tag="@string/wednesdayTag"
+            style="@style/WeekdayStyle" />
+        <Button
+            android:id="@+id/btnThursday"
+            android:text="@string/thursday"
+            android:tag="@string/thursdayTag"
+            style="@style/WeekdayStyle" />
+        <Button
+            android:id="@+id/btnFriday"
+            android:text="@string/friday"
+            android:tag="@string/fridayTag"
+            style="@style/WeekdayStyle" />
+        <Button
+            android:id="@+id/btnSaturday"
+            android:text="@string/saturday"
+            android:tag="@string/saturdayTag"
+            style="@style/WeekdayStyle" />
+    </LinearLayout>
+
+    <!-- Mode Select -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp">
+        <LinearLayout
+            android:id="@+id/modeClockLayout"
+            style="@style/modeLayout">
+            <ImageView
+                android:src="@drawable/ic_baseline_alarm_24"
+                style="@style/modeImage" />
+            <TextView
+                android:text="預設模式"
+                style="@style/modeText" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/modeShakeLayout"
+            style="@style/modeLayout">
+            <ImageView
+                android:src="@drawable/ic_baseline_vibration_24"
+                style="@style/modeImage" />
+            <TextView
+                android:text="搖晃手機"
+                style="@style/modeText" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/modeMathLayout"
+            style="@style/modeLayout">
+            <ImageView
+                android:src="@drawable/ic_baseline_math_24"
+                style="@style/modeImage" />
+            <TextView
+                android:text="數學題目"
+                style="@style/modeText" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/modeMemorizeLayout"
+            style="@style/modeLayout">
+            <ImageView
+                android:src="@drawable/ic_baseline_memorize_game_24"
+                style="@style/modeImage" />
+            <TextView
+                android:text="記憶遊戲"
+                style="@style/modeText" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Sound Select -->
+</LinearLayout>

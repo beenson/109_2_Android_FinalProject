@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="WeekdayStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:backgroundTint">@color/weekdaySelected</item>
+        <item name="android:onClick">weekdayClick</item>
+    </style>
+
+    <style name="modeLayout">
+        <item name="android:onClick">changeMode</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/border</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="modeImage">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+    </style>
+
+    <style name="modeText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:textColor">@color/mode</item>
+        <item name="android:gravity">center</item>
+    </style>
+</resources>
