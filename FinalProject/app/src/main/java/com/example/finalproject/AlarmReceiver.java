@@ -15,6 +15,8 @@ import android.os.Vibrator;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import static com.example.finalproject.MainActivity.r;
+
 public class AlarmReceiver extends BroadcastReceiver {
     private String NotifiChannel = "Alarm";
 
@@ -36,12 +38,12 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
-                .setDefaults(NotificationCompat.DEFAULT_ALL);
+                .setDefaults(0);
         mNotificationManager.notify(0, builder.build());
 
         //Ringtone
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        Ringtone r = RingtoneManager.getRingtone(context, notification);
+        r = RingtoneManager.getRingtone(context, notification);
         r.play();
     }
 }

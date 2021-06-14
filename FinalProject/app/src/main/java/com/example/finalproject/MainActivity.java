@@ -12,6 +12,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> WEEKDAY_KEY = new ArrayList<>();
     private NotificationManager mNotificationManager;
     private String NotifiChannel = "Alarm";
+    static Ringtone r;
     ArrayList<LinearLayout> mode = new ArrayList<>();
     Map<String, Boolean> weekday = new HashMap<>();
     int currentMode;
@@ -47,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //stop ringtone
+        if(r != null) {
+            r.stop();
+        }
 
         Map<String, Button> weekdayBtn = new HashMap<>();
         weekdayBtn.put(getString(R.string.sundayTag), findViewById(R.id.btnSunday));
@@ -90,6 +99,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (r != null) {
+            r.stop();
+        }
+    }
+
+    @Override
     protected void onPause(){
         super.onPause();
 
@@ -115,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setAlarm() {
         Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 24444, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
 
         //clear previous alarm
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
