@@ -1,10 +1,8 @@
 package com.example.finalproject;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlarmManager;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,35 +11,28 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 public class MainActivity extends AppCompatActivity {
-    private SharedPreferences mPreferences;
-    private String sharedPrefFile = "com.example.android.finalproject";
-    private String MODE_KEY = "mode";
+    static String sharedPrefFile = "com.example.android.finalproject";
+    static String MODE_KEY = "mode";
+    static Ringtone r;
+    static SharedPreferences mPreferences;
     private String HOUR_KEY = "hour", MINUTE_KEY = "minute";
     private ArrayList<String> WEEKDAY_KEY = new ArrayList<>();
     private NotificationManager mNotificationManager;
     private String NotifiChannel = "Alarm";
-    static Ringtone r;
     ArrayList<LinearLayout> mode = new ArrayList<>();
     Map<String, Boolean> weekday = new HashMap<>();
     int currentMode;
@@ -51,11 +42,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //stop ringtone
-        if(r != null) {
-            r.stop();
-        }
 
         Map<String, Button> weekdayBtn = new HashMap<>();
         weekdayBtn.put(getString(R.string.sundayTag), findViewById(R.id.btnSunday));
@@ -90,20 +76,31 @@ public class MainActivity extends AppCompatActivity {
         timePicker = (TimePicker)findViewById(R.id.timePicker);
         timePicker.setHour(mPreferences.getInt(HOUR_KEY, 0));
         timePicker.setMinute(mPreferences.getInt(MINUTE_KEY, 0));
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+        /*timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
                 setAlarm();
             }
-        });
+        });*/
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (r != null) {
+        if(r != null && currentMode == 0) {
             r.stop();
+        }
+
+        //start mission
+        if(r != null && r.isPlaying()) {
+            ArrayList<Class> classes = new ArrayList<Class>();
+            classes.add(MainActivity.class);
+            classes.add(Shake.class);
+            classes.add(MathQuestions.class);
+            classes.add(Memorize.class);
+
+            Intent intent = new Intent(this, classes.get(currentMode));
+            startActivity(intent);
         }
     }
 
@@ -117,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         preferencesEditor.putInt(MINUTE_KEY, timePicker.getMinute());
         WEEKDAY_KEY.forEach((value) -> preferencesEditor.putBoolean(value, weekday.get(value)));
         preferencesEditor.apply();
+
+        setAlarm();
     }
 
     public void changeMode(View view) {
@@ -133,9 +132,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void setAlarm() {
         Intent intent = new Intent(MainActivity.this, AlarmReceiver.class);
+        intent.putExtra("mode", currentMode);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, intent, 0);
-
-        //clear previous alarm
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 
         //check there is on at least one weekday
