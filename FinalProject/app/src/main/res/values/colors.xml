@@ -13,4 +13,7 @@
 
     <color name="weekdaySelected">#FF3700B3</color>
     <color name="weekdayUnselected">#FFA9A9A9</color>
+
+    <color name="gray">#FFA9A9A9</color>
+    <color name="orange">#FFFF8C00</color>
 </resources>
