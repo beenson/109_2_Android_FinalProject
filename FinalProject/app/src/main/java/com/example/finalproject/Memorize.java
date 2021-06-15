@@ -6,13 +6,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,11 +26,17 @@ public class Memorize extends AppCompatActivity {
     Boolean[][] selected = new Boolean[4][4];
     Boolean[][] answer = new Boolean[4][4];
     boolean allowRestart = true;
+    int totalTime = 3000;
+    ProgressBar progressBar;
+    CountDownTimer countDownTimer;
+    Calendar startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memorize);
+
+        progressBar = findViewById(R.id.progressBarMemorize);
 
         //動態生成 (https://thumbb13555.pixnet.net/blog/post/329641828-create-ui-dynamically)
         LinearLayout layout = findViewById(R.id.mLayout);
@@ -56,6 +65,8 @@ public class Memorize extends AppCompatActivity {
         if(!allowRestart)
             return;
 
+        if(countDownTimer != null)
+            countDownTimer.cancel();
         allowRestart = false;
         for(int i = 0; i < 4; i++) {
             for(int j = 0; j < 4; j++) {
@@ -75,6 +86,7 @@ public class Memorize extends AppCompatActivity {
                         btn[i][j].setBackgroundColor(getColor(R.color.gray));
                         btn[i][j].setOnClickListener(v -> {
                             clicked(v);
+                            startTimer();
                         });
                     }
                 }
@@ -103,6 +115,27 @@ public class Memorize extends AppCompatActivity {
                 return false;
 
         return true;
+    }
+
+    private void startTimer() {
+        startTime = Calendar.getInstance();
+        if(countDownTimer != null)
+            countDownTimer.cancel();
+
+        countDownTimer=new CountDownTimer(totalTime,10) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                progressBar.setProgress(100 - ((int)(Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) * 100 / totalTime));
+            }
+
+            @Override
+            public void onFinish() {
+                progressBar.setProgress(0);
+                startTimer();
+                restart(null);
+            }
+        };
+        countDownTimer.start();
     }
 
     private Button newBtn(String txt) {

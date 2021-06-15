@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".Memorize">
 
+    <ProgressBar
+        android:id="@+id/progressBarMemorize"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <Button
         android:onClick="restart"
         android:text="restart"
