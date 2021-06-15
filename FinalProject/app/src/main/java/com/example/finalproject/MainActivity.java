@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -173,5 +175,21 @@ public class MainActivity extends AppCompatActivity {
             notificationChannel.setDescription("desc");
             mNotificationManager.createNotificationChannel(notificationChannel);
         }
+    }
+
+    public void demo(View view) {
+        //Ringtone
+        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        r = RingtoneManager.getRingtone(this, notification);
+        r.play();
+
+        ArrayList<Class> classes = new ArrayList<Class>();
+        classes.add(MainActivity.class);
+        classes.add(Shake.class);
+        classes.add(MathQuestions.class);
+        classes.add(Memorize.class);
+
+        Intent intent = new Intent(this, classes.get(currentMode));
+        startActivity(intent);
     }
 }
