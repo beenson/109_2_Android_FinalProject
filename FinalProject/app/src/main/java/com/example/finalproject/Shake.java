@@ -2,12 +2,18 @@ package com.example.finalproject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -18,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.Provider;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Calendar;
@@ -26,14 +33,13 @@ import static java.lang.Math.abs;
 import static java.lang.Math.signum;
 
 public class Shake extends AppCompatActivity implements SensorEventListener {
+    final int totalTime = 5000;
     TextView txt;
     int count = 10, last = 0;
     SensorManager mSensorManager;
     Sensor mAccelerometer;
-    int totalTime = 5000;
     ProgressBar progressBar;
     CountDownTimer countDownTimer;
-    Calendar startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,27 +65,29 @@ public class Shake extends AppCompatActivity implements SensorEventListener {
     @Override
     protected void onPause() {
         super.onPause();
+
+        countDownTimer.cancel();
+        if(MainActivity.r != null && MainActivity.r.isPlaying()) {
+            MainActivity.callAgain(this);
+        }
         mSensorManager.unregisterListener(this);
     }
 
+    public class Finish implements MainActivity.Command
+    {
+        public void execute()
+        {
+            Toast.makeText(Shake.this, "請搖晃手機", Toast.LENGTH_SHORT).show();
+            count = 10;
+            startTimer();
+        }
+    }
+
     private void startTimer() {
-        startTime = Calendar.getInstance();
         if(countDownTimer != null)
             countDownTimer.cancel();
 
-        countDownTimer=new CountDownTimer(totalTime,10) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                progressBar.setProgress(100 - ((int)(Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) * 100 / totalTime));
-            }
-
-            @Override
-            public void onFinish() {
-                progressBar.setProgress(0);
-                startTimer();
-                count = 10;
-            }
-        };
+        countDownTimer = MainActivity.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
         countDownTimer.start();
     }
 
@@ -104,6 +112,7 @@ public class Shake extends AppCompatActivity implements SensorEventListener {
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 

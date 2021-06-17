@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Vibrator;
@@ -48,6 +49,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentIntent(pendingIntent)
                 .setDefaults(0);
         mNotificationManager.notify(0, builder.build());
+
+        AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_RING, Math.max(1, audioManager.getStreamVolume(AudioManager.STREAM_RING)), AudioManager.AUDIOFOCUS_NONE);
 
         //Ringtone
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);

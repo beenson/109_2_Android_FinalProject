@@ -17,7 +17,7 @@
 
     <!-- Weekday Select -->
     <LinearLayout
-        android:padding="10dp"
+        android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
@@ -60,7 +60,7 @@
     <!-- Mode Select -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="110dp">
+        android:layout_height="140dp">
         <LinearLayout
             android:id="@+id/modeClockLayout"
             style="@style/modeLayout">
@@ -81,6 +81,11 @@
                 android:text="搖晃手機"
                 style="@style/modeText" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp">
         <LinearLayout
             android:id="@+id/modeMathLayout"
             style="@style/modeLayout">
@@ -106,7 +111,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center"
         android:onClick="demo"
         android:text="demo"/>

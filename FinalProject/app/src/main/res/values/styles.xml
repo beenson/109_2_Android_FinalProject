@@ -23,12 +23,13 @@
     <style name="modeImage">
         <item name="android:layout_margin">5dp</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_height">90dp</item>
     </style>
 
     <style name="modeText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">25dp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/mode</item>
         <item name="android:gravity">center</item>
     </style>

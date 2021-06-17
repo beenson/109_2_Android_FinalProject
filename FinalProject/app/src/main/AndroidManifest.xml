@@ -11,10 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProject">
-        <activity android:name=".Memorize"/>
-        <activity android:name=".MathQuestions" />
-        <activity android:name=".Shake"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".Memorize"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MathQuestions"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Shake"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -3,25 +3,29 @@ package com.example.finalproject;
 import androidx.annotation.IntRange;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
 public class MathQuestions extends AppCompatActivity {
+    final int totalTime = 10000;
     int count = 5;
     TextView question, left;
     EditText answer;
     int ans;
-    int totalTime = 10000;
     ProgressBar progressBar;
     CountDownTimer countDownTimer;
-    Calendar startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,16 @@ public class MathQuestions extends AppCompatActivity {
         left = findViewById(R.id.left);
 
         newQuesion();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        countDownTimer.cancel();
+        if(MainActivity.r != null && MainActivity.r.isPlaying()) {
+            MainActivity.callAgain(this);
+        }
     }
 
     public void check(View view) {
@@ -52,6 +66,7 @@ public class MathQuestions extends AppCompatActivity {
 
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         }catch (NumberFormatException e){
 
@@ -65,24 +80,20 @@ public class MathQuestions extends AppCompatActivity {
         startTimer();
     }
 
+    public class Finish implements MainActivity.Command
+    {
+        public void execute()
+        {
+            startTimer();
+            newQuesion();
+        }
+    }
+
     private void startTimer() {
-        startTime = Calendar.getInstance();
         if(countDownTimer != null)
             countDownTimer.cancel();
 
-        countDownTimer=new CountDownTimer(totalTime,10) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                progressBar.setProgress(100 - ((int)(Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) * 100 / totalTime));
-            }
-
-            @Override
-            public void onFinish() {
-                progressBar.setProgress(0);
-                startTimer();
-                newQuesion();
-            }
-        };
+        countDownTimer = MainActivity.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
         countDownTimer.start();
     }
 }

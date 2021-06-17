@@ -3,8 +3,12 @@ package com.example.finalproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -22,14 +26,13 @@ import java.util.TimerTask;
 import static com.google.android.material.internal.ViewUtils.dpToPx;
 
 public class Memorize extends AppCompatActivity {
+    final int totalTime = 3000;
     Button[][] btn = new Button[4][4];
     Boolean[][] selected = new Boolean[4][4];
     Boolean[][] answer = new Boolean[4][4];
     boolean allowRestart = true;
-    int totalTime = 3000;
     ProgressBar progressBar;
     CountDownTimer countDownTimer;
-    Calendar startTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,16 @@ public class Memorize extends AppCompatActivity {
         }
 
         start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        countDownTimer.cancel();
+        if(MainActivity.r != null && MainActivity.r.isPlaying()) {
+            MainActivity.callAgain(this);
+        }
     }
 
     public void restart(View view) {
@@ -106,6 +119,7 @@ public class Memorize extends AppCompatActivity {
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -117,24 +131,20 @@ public class Memorize extends AppCompatActivity {
         return true;
     }
 
+    public class Finish implements MainActivity.Command
+    {
+        public void execute()
+        {
+            startTimer();
+            restart(null);
+        }
+    }
+
     private void startTimer() {
-        startTime = Calendar.getInstance();
         if(countDownTimer != null)
             countDownTimer.cancel();
 
-        countDownTimer=new CountDownTimer(totalTime,10) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                progressBar.setProgress(100 - ((int)(Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) * 100 / totalTime));
-            }
-
-            @Override
-            public void onFinish() {
-                progressBar.setProgress(0);
-                startTimer();
-                restart(null);
-            }
-        };
+        countDownTimer = MainActivity.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
         countDownTimer.start();
     }
 
