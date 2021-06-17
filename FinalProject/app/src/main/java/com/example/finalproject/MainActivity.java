@@ -2,6 +2,7 @@ package com.example.finalproject;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
@@ -47,15 +48,16 @@ public class MainActivity extends AppCompatActivity {
     private NotificationManager mNotificationManager;
     ArrayList<LinearLayout> mode = new ArrayList<>();
     Map<String, Boolean> weekday = new HashMap<>();
+    Map<String, Button> weekdayBtn = new HashMap<>();
     int currentMode;
     TimePicker timePicker;
+    Boolean demo = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Map<String, Button> weekdayBtn = new HashMap<>();
         weekdayBtn.put(getString(R.string.sundayTag), findViewById(R.id.btnSunday));
         weekdayBtn.put(getString(R.string.mondayTag), findViewById(R.id.btnMonday));
         weekdayBtn.put(getString(R.string.tuesdayTag), findViewById(R.id.btnTuesday));
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         for (Map.Entry<String, Boolean> entry : weekday.entrySet()) {
             active |= entry.getValue();
         }
-        if(!active)
+        if(!active || demo)
             return;
 
         //set alarm time
@@ -183,9 +185,25 @@ public class MainActivity extends AppCompatActivity {
 
         mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         createNotificationChannel(mNotificationManager);
+
+        if(!(r != null && r.isPlaying())) {
+            //提醒使用者下個運作時間
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "Alarm");
+            builder.setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setContentTitle("Alarm")
+                    .setContentText(String.format("下個作用時間為 %02d/%02d(%s) %02d:%02d",
+                            alarm.get(Calendar.MONTH) + 1, alarm.get(Calendar.DATE),
+                            weekdayBtn.get(WEEKDAY_KEY.get(alarm.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY)).getText(),
+                            alarm.get(Calendar.HOUR_OF_DAY), alarm.get(Calendar.MINUTE)))
+                    .setAutoCancel(true)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setDefaults(0);
+            mNotificationManager.notify(0, builder.build());
+        }
     }
 
     public void demo(View view) {
+        demo = true;
         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_RING, Math.max(1, audioManager.getStreamVolume(AudioManager.STREAM_RING)), AudioManager.AUDIOFOCUS_NONE);
 
