@@ -226,29 +226,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-    public interface Command
-    {
-        public void execute();
-    }
-
-    public static CountDownTimer timer(Command command, Context context, ProgressBar progressBar, int totalTime, Calendar startTime){
-        return new CountDownTimer(totalTime,10) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                progressBar.setProgress(100 - ((int)(Calendar.getInstance().getTimeInMillis() - startTime.getTimeInMillis()) * 100 / totalTime));
-            }
-
-            @Override
-            public void onFinish() {
-                progressBar.setProgress(0);
-
-                command.execute();
-
-                AudioManager audioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
-                audioManager.setStreamVolume(AudioManager.STREAM_RING, audioManager.getStreamVolume(AudioManager.STREAM_RING) + 1, AudioManager.AUDIOFOCUS_NONE);
-            }
-        };
-    }
 
     public static void callAgain(Context context) {
         MainActivity.r.stop();

@@ -80,7 +80,7 @@ public class MathQuestions extends AppCompatActivity {
         startTimer();
     }
 
-    public class Finish implements MainActivity.Command
+    public class Finish implements CountDown.Command
     {
         public void execute()
         {
@@ -93,7 +93,7 @@ public class MathQuestions extends AppCompatActivity {
         if(countDownTimer != null)
             countDownTimer.cancel();
 
-        countDownTimer = MainActivity.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
+        countDownTimer = CountDown.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
         countDownTimer.start();
     }
 }

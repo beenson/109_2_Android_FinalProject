@@ -73,7 +73,7 @@ public class Shake extends AppCompatActivity implements SensorEventListener {
         mSensorManager.unregisterListener(this);
     }
 
-    public class Finish implements MainActivity.Command
+    public class Finish implements CountDown.Command
     {
         public void execute()
         {
@@ -87,7 +87,7 @@ public class Shake extends AppCompatActivity implements SensorEventListener {
         if(countDownTimer != null)
             countDownTimer.cancel();
 
-        countDownTimer = MainActivity.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
+        countDownTimer = CountDown.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
         countDownTimer.start();
     }
 

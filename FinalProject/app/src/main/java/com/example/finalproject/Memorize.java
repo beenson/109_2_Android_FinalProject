@@ -131,7 +131,7 @@ public class Memorize extends AppCompatActivity {
         return true;
     }
 
-    public class Finish implements MainActivity.Command
+    public class Finish implements CountDown.Command
     {
         public void execute()
         {
@@ -144,7 +144,7 @@ public class Memorize extends AppCompatActivity {
         if(countDownTimer != null)
             countDownTimer.cancel();
 
-        countDownTimer = MainActivity.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
+        countDownTimer = CountDown.timer(new Finish(), this, progressBar, totalTime, Calendar.getInstance());
         countDownTimer.start();
     }
 
